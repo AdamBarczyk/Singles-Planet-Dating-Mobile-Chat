@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
 
         val firebaseAuthentication = FirebaseAuth.getInstance()
         //todo: signOut()
-        firebaseAuthentication.signOut()
+        //firebaseAuthentication.signOut()
 
         setContent {
             SinglesPlanetChatTheme {

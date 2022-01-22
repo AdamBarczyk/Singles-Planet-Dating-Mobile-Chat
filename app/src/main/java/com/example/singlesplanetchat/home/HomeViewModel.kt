@@ -1,7 +1,9 @@
 package com.example.singlesplanetchat.home
 
+import android.widget.Toast
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.singlesplanetchat.model.User
@@ -78,7 +80,7 @@ class HomeViewModel @Inject constructor(
                                         user.value.selectedProfiles.toMutableList()
 
                                     if (!user.value.location.isNullOrEmpty()) {
-                                        onEvent(HomeEvent.GetUsers)
+                                        onEvent(HomeEvent.GetPairs)
                                     }
                                 }
                                 is Resource.Error -> {
@@ -133,9 +135,9 @@ class HomeViewModel @Inject constructor(
                     onEvent(HomeEvent.UpdateUserData(user.value))
                 }
             }
-            is HomeEvent.GetUsers -> {
+            is HomeEvent.GetPairs -> {
                 viewModelScope.launch {
-                    _pairingRepository.getUsers(user = user.value).onEach { result ->
+                    _pairingRepository.getPairs(user = user.value).onEach { result ->
                         when (result) {
                             is Resource.Loading -> {
                                 _state.value = state.value.copy(
@@ -191,6 +193,10 @@ class HomeViewModel @Inject constructor(
                         onEvent(HomeEvent.UpdateUserData(user.value))
                     }
                 }
+            }
+            is HomeEvent.OpenChatRoom -> {
+                _selectedUser.value = event.value
+                _eventFlow.emit(UIEvent.Success(Screen.Screen))
             }
             is HomeEvent.NewPair -> {
                 onEvent(HomeEvent.SelectNo(selectedUser.value))

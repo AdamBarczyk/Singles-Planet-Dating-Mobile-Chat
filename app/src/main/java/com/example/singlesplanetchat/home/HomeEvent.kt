@@ -7,7 +7,8 @@ sealed class HomeEvent {
     data class SelectYes(val value: User): HomeEvent()
     data class SelectNo(val value: User): HomeEvent()
     data class UpdateUserData(val value: User): HomeEvent()
+    data class OpenChatRoom(val value: User): HomeEvent()
     object NewPair: HomeEvent()
     object GetUserData: HomeEvent()
-    object GetUsers: HomeEvent()
+    object GetPairs: HomeEvent()
 }
