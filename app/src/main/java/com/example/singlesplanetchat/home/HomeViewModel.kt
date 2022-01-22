@@ -195,8 +195,10 @@ class HomeViewModel @Inject constructor(
                 }
             }
             is HomeEvent.OpenChatRoom -> {
-                _selectedUser.value = event.value
-                _eventFlow.emit(UIEvent.Success(Screen.Screen))
+                viewModelScope.launch {
+                    _selectedUser.value = event.value
+                    _eventFlow.emit(UIEvent.Success(Screen.ChatRoomScreen.route))
+                }
             }
             is HomeEvent.NewPair -> {
                 onEvent(HomeEvent.SelectNo(selectedUser.value))

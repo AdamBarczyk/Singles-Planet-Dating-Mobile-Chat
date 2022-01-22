@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import coil.annotation.ExperimentalCoilApi
+import com.example.singlesplanetchat.chat_room.ChatRoomScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 //import com.example.singlesplanetchat.details.DetailsScreen
 import com.example.singlesplanetchat.home.HomeScreen
@@ -67,6 +68,9 @@ fun NavGraphBuilder.homeNavGraph(
     ) {
         composable(route = Screen.HomeScreen.route) {
             HomeScreen(navController = navController)
+        }
+        composable(route = Screen.ChatRoomScreen.route) {
+            ChatRoomScreen(navController = navController)
         }
 //        composable(route = Screen.PairsScreen.route) {
 //            PairsScreen(navController = navController)
