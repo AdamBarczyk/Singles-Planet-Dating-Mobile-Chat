@@ -10,7 +10,7 @@ import androidx.navigation.navigation
 import coil.annotation.ExperimentalCoilApi
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 //import com.example.singlesplanetchat.details.DetailsScreen
-//import com.example.singlesplanetchat.home.HomeScreen
+import com.example.singlesplanetchat.home.HomeScreen
 //import com.example.singlesplanetchat.pairs.PairsScreen
 //import com.example.singlesplanetchat.profile.ProfileScreen
 import com.example.singlesplanetchat.sign_in.SignInScreen
@@ -32,7 +32,7 @@ fun SetupNavGraph(
         route = Constants.ROOT_GRAPH_ROUTE
     ) {
         authenticationNavGraph(navController = navController)
-//        homeNavGraph(navController = navController)
+        homeNavGraph(navController = navController)
     }
 }
 
@@ -55,19 +55,19 @@ fun NavGraphBuilder.authenticationNavGraph(
     }
 }
 
-//@ExperimentalMaterialApi
-//@ExperimentalPermissionsApi
-//@ExperimentalCoilApi
-//fun NavGraphBuilder.homeNavGraph(
-//    navController: NavHostController
-//) {
-//    navigation(
-//        startDestination = Screen.HomeScreen.route,
-//        route = Constants.HOME_GRAPH_ROUTE
-//    ) {
-//        composable(route = Screen.HomeScreen.route) {
-//            HomeScreen(navController = navController)
-//        }
+@ExperimentalMaterialApi
+@ExperimentalPermissionsApi
+@ExperimentalCoilApi
+fun NavGraphBuilder.homeNavGraph(
+    navController: NavHostController
+) {
+    navigation(
+        startDestination = Screen.HomeScreen.route,
+        route = Constants.HOME_GRAPH_ROUTE
+    ) {
+        composable(route = Screen.HomeScreen.route) {
+            HomeScreen(navController = navController)
+        }
 //        composable(route = Screen.PairsScreen.route) {
 //            PairsScreen(navController = navController)
 //        }
@@ -77,5 +77,5 @@ fun NavGraphBuilder.authenticationNavGraph(
 //        composable(route = Screen.DetailsScreen.route + "/{uid}") {
 //            DetailsScreen(navController = navController)
 //        }
-//    }
-//}
+    }
+}

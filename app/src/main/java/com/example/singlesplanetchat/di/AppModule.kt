@@ -50,11 +50,11 @@ object AppModule {
         return ProfileRepositoryImpl(firebaseFirestore, firebaseStorage)
     }
 
-//    @Provides
-//    @Singleton
-//    fun providePairingRepository(
-//        firebaseFirestore: FirebaseFirestore
-//    ): PairsRepository {
-//        return PairsRepositoryImpl(firebaseFirestore)
-//    }
+    @Provides
+    @Singleton
+    fun providePairingRepository(
+        firebaseFirestore: FirebaseFirestore
+    ): PairsRepository {
+        return PairsRepositoryImpl(firebaseFirestore)
+    }
 }

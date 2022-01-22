@@ -17,7 +17,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.firebase.auth.FirebaseAuth
 import com.example.singlesplanetchat.composables.SetupNavGraph
-import com.example.singlesplanetchat.ui.theme.SinglesPlanetTheme
+import com.example.singlesplanetchat.ui.theme.SinglesPlanetChatTheme
 import com.example.singlesplanetchat.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,9 +31,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val firebaseAuthentication = FirebaseAuth.getInstance()
+        //todo: signOut()
+        firebaseAuthentication.signOut()
 
         setContent {
-            SinglesPlanetTheme {
+            SinglesPlanetChatTheme {
 
                 val focusManager = LocalFocusManager.current
                 val systemUIController = rememberSystemUiController()
