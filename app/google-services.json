@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "841833190137",
+    "project_id": "singlesplanet-df651",
+    "storage_bucket": "singlesplanet-df651.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841833190137:android:fcd2c30736d3297b0ac828",
+        "android_client_info": {
+          "package_name": "com.example.singlesplanetchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841833190137-45sjc376mfge8unp8ma938lr6uvqpq45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw4uGfIU49T3VQv6mNERXSWVHJrdINFLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841833190137-45sjc376mfge8unp8ma938lr6uvqpq45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841833190137:android:905ec276556256e20ac828",
+        "android_client_info": {
+          "package_name": "com.krygodev.singlesplanet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841833190137-45sjc376mfge8unp8ma938lr6uvqpq45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw4uGfIU49T3VQv6mNERXSWVHJrdINFLY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841833190137-45sjc376mfge8unp8ma938lr6uvqpq45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
