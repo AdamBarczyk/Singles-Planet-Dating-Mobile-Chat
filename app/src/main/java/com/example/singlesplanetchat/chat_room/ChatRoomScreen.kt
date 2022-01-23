@@ -80,7 +80,6 @@ fun ChatRoomScreen(
                     backgroundColor = MaterialTheme.colors.background
                 ) {
                     Text(
-//                        text = "Rozmowca",
                         text = if (chatRoomUsers[0].uid == currentUserId) chatRoomUsers[0].name!!
                         else chatRoomUsers[1].name!!,
                         fontWeight = FontWeight.Bold,
@@ -99,14 +98,12 @@ fun ChatRoomScreen(
                         if (message.user_id == currentUserId) {
                             RightMessageBox(
                                 msg = message,
-//                                photoURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDhQugX44XTnGgOHCvN--nqcEZ6tM4uEy28w&usqp=CAU"
                                 photoURL = if (chatRoomUsers[0].uid == currentUserId) chatRoomUsers[0].photoURL!!
                             else chatRoomUsers[1].photoURL!!
                             )
                         } else {
                             LeftMessageBox(
                                 msg = message,
-//                                photoURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDhQugX44XTnGgOHCvN--nqcEZ6tM4uEy28w&usqp=CAU"
                                 photoURL = if (chatRoomUsers[0].uid == currentUserId) chatRoomUsers[1].photoURL!!
                                 else chatRoomUsers[0].photoURL!!
                             )
@@ -114,12 +111,10 @@ fun ChatRoomScreen(
                     }
                 }
 
-                var text by remember { mutableStateOf("") }
                 OutlinedTextField(
-                    value = text, //viewModel.oneMessage.value.toString(),
+                    value = viewModel.oneMessage.value.message?:"",
                     onValueChange = { newText ->
                         viewModel.onEvent(ChatRoomEvent.UpdateEntryMessage(newText))
-                        text = newText
                     },
                     label = {
                         Text("Type Your Message")

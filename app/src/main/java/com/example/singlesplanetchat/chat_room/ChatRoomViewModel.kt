@@ -125,6 +125,9 @@ class ChatRoomViewModel @Inject constructor(
                                     error = "",
                                     result = result.data
                                 )
+                                _oneMessage.value = oneMessage.value.copy(
+                                    message = ""
+                                )
                             }
                             is Resource.Error -> {
                                 _state.value = state.value.copy(
