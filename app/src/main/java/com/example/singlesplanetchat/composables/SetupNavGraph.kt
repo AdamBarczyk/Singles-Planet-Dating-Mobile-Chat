@@ -69,7 +69,7 @@ fun NavGraphBuilder.homeNavGraph(
         composable(route = Screen.HomeScreen.route) {
             HomeScreen(navController = navController)
         }
-        composable(route = Screen.ChatRoomScreen.route) {
+        composable(route = Screen.ChatRoomScreen.route + "/{roomId}") {
             ChatRoomScreen(navController = navController)
         }
 //        composable(route = Screen.PairsScreen.route) {

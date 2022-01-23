@@ -1,19 +1,21 @@
 package com.example.singlesplanetchat.home
 
-import android.widget.Toast
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.singlesplanetchat.model.ChatRoom
 import com.example.singlesplanetchat.model.User
 import com.example.singlesplanetchat.repository.AuthenticationRepository
+import com.example.singlesplanetchat.repository.ChatRoomsRepository
 import com.example.singlesplanetchat.repository.PairsRepository
 import com.example.singlesplanetchat.repository.ProfileRepository
 import com.example.singlesplanetchat.util.LoadingState
 import com.example.singlesplanetchat.util.Resource
 import com.example.singlesplanetchat.util.Screen
 import com.example.singlesplanetchat.util.UIEvent
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -26,7 +28,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val _authenticationRepository: AuthenticationRepository,
     private val _profileRepository: ProfileRepository,
-    private val _pairingRepository: PairsRepository
+    private val _pairingRepository: PairsRepository,
+    private val _chatRoomsRepository: ChatRoomsRepository
 ) : ViewModel() {
 
     private val _state = mutableStateOf(LoadingState())
@@ -38,13 +41,13 @@ class HomeViewModel @Inject constructor(
     private val _user = mutableStateOf(User())
     val user: State<User> = _user
 
-    private val _selectedUser = mutableStateOf(User())
-    private val selectedUser: State<User> = _selectedUser
-
     private val _usersList = mutableStateOf(listOf<User>())
     val usersList: State<List<User>> = _usersList
 
-    private var _userSelectedProfiles = mutableListOf<String>()
+    private val _chatRoomsList = mutableStateOf(listOf<ChatRoom>())
+    val chatRoomsList: State<List<ChatRoom>> = _chatRoomsList
+
+    private val firebaseAuthentication: FirebaseAuth = FirebaseAuth.getInstance()
 
     init {
         onEvent(HomeEvent.GetUserData)
@@ -76,12 +79,9 @@ class HomeViewModel @Inject constructor(
 
                                     _user.value = result.data!!
 
-                                    _userSelectedProfiles =
-                                        user.value.selectedProfiles.toMutableList()
+                                    onEvent(HomeEvent.GetUsers)
+                                    onEvent(HomeEvent.GetChatRooms(user.value))
 
-                                    if (!user.value.location.isNullOrEmpty()) {
-                                        onEvent(HomeEvent.GetPairs)
-                                    }
                                 }
                                 is Resource.Error -> {
                                     _state.value = state.value.copy(
@@ -126,16 +126,7 @@ class HomeViewModel @Inject constructor(
                     }.launchIn(this)
                 }
             }
-            is HomeEvent.SetUserLocation -> {
-                _user.value = user.value.copy(
-                    location = event.value
-                )
-
-                if (user.value.uid != null) {
-                    onEvent(HomeEvent.UpdateUserData(user.value))
-                }
-            }
-            is HomeEvent.GetPairs -> {
+            is HomeEvent.GetUsers -> {
                 viewModelScope.launch {
                     _pairingRepository.getPairs(user = user.value).onEach { result ->
                         when (result) {
@@ -168,59 +159,53 @@ class HomeViewModel @Inject constructor(
 
                 }
             }
-            is HomeEvent.SelectNo -> {
-                _selectedUser.value = event.value
-                _usersList.value = usersList.value.toMutableList().also { list ->
-                    list.remove(selectedUser.value)
-                }
-            }
-            is HomeEvent.SelectYes -> {
-                _selectedUser.value = event.value
-                if (!_user.value.selectedProfiles.contains(selectedUser.value.uid)) {
-
-                    if (selectedUser.value.selectedProfiles.contains(user.value.uid)) {
-                        onEvent(HomeEvent.NewPair)
-                    } else {
-                        _userSelectedProfiles.add(selectedUser.value.uid!!)
-
-                        // Delete selected profile from list
-                        onEvent(HomeEvent.SelectNo(selectedUser.value))
-
-                        _user.value = user.value.copy(
-                            selectedProfiles = _userSelectedProfiles
-                        )
-
-                        onEvent(HomeEvent.UpdateUserData(user.value))
+            is HomeEvent.OpenChatRoom -> {
+                chatRoomsList.value.forEach { chatRoom ->
+                    if (event.user.uid == chatRoom.user1 || event.user.uid == chatRoom.user2) {
+                        viewModelScope.launch {
+                            _eventFlow.emit(UIEvent.Success(Screen.ChatRoomScreen.route + "/${chatRoom.chatId}"))
+                        }
                     }
                 }
             }
-            is HomeEvent.OpenChatRoom -> {
+            is HomeEvent.GetChatRooms -> {
                 viewModelScope.launch {
-                    _selectedUser.value = event.value
-                    _eventFlow.emit(UIEvent.Success(Screen.ChatRoomScreen.route))
+                    _chatRoomsRepository.getChatRooms(loggedUser = user.value).onEach { result ->
+                        when (result) {
+                            is Resource.Loading -> {
+                                _state.value = state.value.copy(
+                                    isLoading = true,
+                                    error = "",
+                                    result = result.data
+                                )
+                            }
+                            is Resource.Success -> {
+                                _state.value = state.value.copy(
+                                    isLoading = false,
+                                    error = "",
+                                    result = result.data
+                                )
+
+                                _chatRoomsList.value = result.data!!
+                            }
+                            is Resource.Error -> {
+                                _state.value = state.value.copy(
+                                    isLoading = false,
+                                    error = result.message!!,
+                                    result = result.data
+                                )
+                                _eventFlow.emit(UIEvent.ShowSnackbar(result.message))
+                            }
+                        }
+                    }.launchIn(this)
+
                 }
             }
-            is HomeEvent.NewPair -> {
-                onEvent(HomeEvent.SelectNo(selectedUser.value))
-
+            is HomeEvent.LogOut -> {
+                firebaseAuthentication.signOut()
                 viewModelScope.launch {
-                    _eventFlow.emit(UIEvent.Success(Screen.HomeScreen.route))
+                    _eventFlow.emit(UIEvent.Success(Screen.SignInScreen.route))
                 }
-
-                _selectedUser.value = selectedUser.value.copy(
-                    pairs = selectedUser.value.pairs.toMutableList()
-                        .also { it.add(user.value.uid!!) }
-                )
-                _selectedUser.value = selectedUser.value.copy(
-                    selectedProfiles = selectedUser.value.selectedProfiles.toMutableList()
-                        .also { it.remove(user.value.uid) }
-                )
-                onEvent(HomeEvent.UpdateUserData(selectedUser.value))
-
-                _user.value = user.value.copy(
-                    pairs = user.value.pairs.toMutableList().also { it.add(selectedUser.value.uid!!) }
-                )
-                onEvent(HomeEvent.UpdateUserData(user.value))
             }
         }
     }

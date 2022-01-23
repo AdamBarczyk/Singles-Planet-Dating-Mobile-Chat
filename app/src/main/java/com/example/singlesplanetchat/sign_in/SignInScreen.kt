@@ -182,30 +182,30 @@ fun SignInScreen(
                         },
                         fontSize = 15.sp
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    Divider(
-                        color = MaterialTheme.colors.primaryVariant,
-                        modifier = Modifier.width(280.dp),
-                        thickness = 2.dp
-                    )
-                    Spacer(modifier = Modifier.height(25.dp))
-                    OutlinedButton(
-                        onClick = {
-                            navController.navigate(Screen.SignUpScreen.route)
-                        },
-                        shape = RoundedCornerShape(5.dp),
-                        colors = ButtonDefaults.outlinedButtonColors(
-                            contentColor = MaterialTheme.colors.background,
-                            backgroundColor = MaterialTheme.colors.secondary
-                        ),
-                    ) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceEvenly,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = "Create New Account", fontSize = 20.sp)
-                        }
-                    }
+//                    Spacer(modifier = Modifier.height(10.dp))
+//                    Divider(
+//                        color = MaterialTheme.colors.primaryVariant,
+//                        modifier = Modifier.width(280.dp),
+//                        thickness = 2.dp
+//                    )
+//                    Spacer(modifier = Modifier.height(25.dp))
+//                    OutlinedButton(
+//                        onClick = {
+//                            navController.navigate(Screen.SignUpScreen.route)
+//                        },
+//                        shape = RoundedCornerShape(5.dp),
+//                        colors = ButtonDefaults.outlinedButtonColors(
+//                            contentColor = MaterialTheme.colors.background,
+//                            backgroundColor = MaterialTheme.colors.secondary
+//                        ),
+//                    ) {
+//                        Row(
+//                            horizontalArrangement = Arrangement.SpaceEvenly,
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            Text(text = "Create New Account", fontSize = 20.sp)
+//                        }
+//                    }
                 }
             }
         }
